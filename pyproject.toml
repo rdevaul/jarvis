@@ -14,20 +14,43 @@ dependencies = [
     "python-dotenv>=1.0.0",
     "rich>=13.0.0",
     "pydantic>=2.0.0",
+    "async-chat @ git+https://github.com/rdevaul/async-chat.git",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
     "ruff>=0.8.0",
     "mypy>=1.13.0",
+]
+voice = [
+    "openai-whisper>=20231117",
+    "piper-tts>=1.2.0",
+    "sounddevice>=0.4.6",
+    "soundfile>=0.12.1",
+]
+server = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.32.0",
+    "websockets>=13.0",
+]
+slack = [
+    "slack-bolt>=1.20.0",
+]
+all = [
+    "jarvis[dev,voice,server,slack]",
 ]
 
 [project.scripts]
 jarvis = "jarvis.cli:main"
+jarvis2 = "jarvis2.main:main"
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/jarvis"]
+packages = ["src/jarvis", "jarvis2"]
 
 [tool.ruff]
 line-length = 100
@@ -39,3 +62,7 @@ select = ["E", "F", "I", "N", "W", "UP"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests", "jarvis2/tests"]
